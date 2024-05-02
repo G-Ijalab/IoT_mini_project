@@ -1,0 +1,123 @@
+﻿
+header {
+    height: auto;
+    width: 100vw;
+    background-color: #809bce;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+}
+header h1{
+    font-family:Cambria;
+    font-size:60px;
+    font-weight:bold;
+    color:black;
+}
+
+h2 {
+    font-family: Cambria;
+    font-size: 50px;
+    font-weight: bold;
+    color: black;
+    position: relative;
+    left: 80px;
+    align-self: flex-start;
+    text-decoration:underline;
+    margin:50px;
+}
+
+h3 {
+    font-family: Cambria;
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    position: relative;
+    left: 40vw;
+    align-self: flex-start;
+    text-decoration: underline;
+    margin: 50px;
+}
+
+.sub-main {
+    height: 50vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-width: 0px 2px 2px 2px;
+    border-color: black;
+    border-style: solid;
+}
+
+#valve-status {
+    background-color: #95b8d1;
+}
+#status-bar {
+    height: auto;
+    width: auto;
+    font-size: 40px;
+    font-weight: bold;
+    font-family:Cambria;
+    color: black;
+    background-color: #9bf6ff;
+    border: 5px solid black;
+    padding: 10px;
+    margin:50px;    
+    transition-property: background-color, color, border-color;
+    transition-duration: 1s, 1s, 2s;
+}
+#status-bar:hover {
+    color: #9bf6ff;
+    background-color: black;
+    border-color: aqua;
+}
+
+#sensor-values {
+    background-color: #d6eadf;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    height:160vh;
+}
+
+.graph {
+    width: 500px;
+    height: 260px;
+    border: 1px solid #cccccc;
+    padding: 0px;
+    margin: 200px;
+    transform: scale(2);
+}
+
+#scroll-link {
+    position: fixed;
+    left: 90%;
+    top: 95%;
+    background-color: aqua;
+    border: 2px solid black;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    transition: width 1s ease-out, background-color 0.5s linear 1s, border-color 0.5s linear 1s;
+    overflow: hidden;
+}
+
+#scroll-link a {
+    text-decoration: none;
+    font-weight: 700;
+    font-family: Cambria;
+    font-size: 120%;
+    color: black;
+    transition: color 0.5s linear 1s;
+}
+
+#scroll-link:hover {
+    width: 135px;
+    background-color: black;
+    border-color: aqua;
+}
+
+#scroll-link a:hover {
+    color: aqua;
+}

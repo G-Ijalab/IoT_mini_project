@@ -1,0 +1,126 @@
+import time
+import RPi.GPIO as GPIO
+from gpiozero import *
+import smtplib
+from datetime import datetime
+import requests    
+import serial
+
+
+#setup
+rain_detect=InputDevice(1) # DO connected to GPIO N
+led_out_rain=LED(12) 
+led_out_fr=LED(16)
+led_out_rtank=LED(20)
+led_out_mtank=LED(21)
+# relay to control pump/motors
+relay_fr=OutputDevice(17)
+relay_mtank=OutputDevice(27)
+relay_rtank=OutputDevice(22)
+ser = serial.Serial('/dev/ttyUSB0', 9600) 
+
+def thing_speak_update(field_index,field_value,value_type):
+    wkey='Z9VTOR8K3D7P0BTQ'
+    base="https://api.thingspeak.com/update"
+    field_id='field'+str(field_index)
+    data={
+        'api_key': wkey,
+        field_id: field_value
+    }
+    try:
+        response = requests.post(base, data=data)
+        if response.status_code == 200:
+            print("{} value updated!".format(value_type))
+        else:
+            print("{} value not updated!".format(value_type))
+    except:
+        pass
+
+def alert(msg="It's Raining, \nRain detected at {}".format(datetime.now()),rec_list=['balaji2110170@ssn.edu.in',]):
+    sender_email = "balajiokokok@gmail.com"  
+    sender_password = "uymv dzuu lxzm gdig"  
+    
+    for i in rec_list:
+        try:
+            server=smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()  
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email,i,msg)
+            print("Alert Sent")
+        except Exception as e:
+            print("Error in sending alert")
+
+def check_rain():
+    # sensor calibration
+    # DO is high when no rain, DO is low when there's rain, is_active gives true for no rain and false for raining
+    flag=not rain_detect.is_active 
+    if flag:
+        led_out_rain.on()
+	
+    else:
+        led_out_rain.off()
+    return flag
+
+def get_turbidity():
+    turbidity_val=0
+    while True:
+        try:
+            data = ser.readline().decode('utf-8').strip()  
+            turbidity_val=int(data)
+            return turbidity_val
+        except KeyboardInterrupt:
+            print("Exiting program")
+            continue
+
+def control_actuators(turbidity_level):
+    led_out_mtank.off()
+    relay_mtank.off()
+    led_out_rtank.off()
+    relay_rtank.off()
+    led_out_fr.off()
+    relay_fr.off()
+    if (turbidity_level>55):
+        print("Main water tank")
+        #led indication for main water tank 
+        led_out_mtank.on()
+        relay_mtank.on()
+    elif (turbidity_level<=55) and (turbidity_level>30):
+        print("Rain water tank")
+        #led indication for rain water tank
+        led_out_rtank.on()
+        relay_rtank.on()
+    else:
+        print("Free release")
+        #led indication for free
+        led_out_fr.on()
+        relay_fr.on()
+        
+
+def main():
+    aflag=True
+    while True:
+        rain_flag=check_rain()
+        if rain_flag:
+            print("Rain detected ")
+                # Alert message
+            if aflag:
+                alert()
+                aflag=False
+            turbidity_level = get_turbidity()
+            print("Turbidity Level : ",turbidity_level)
+            control_actuators(turbidity_level)
+		
+            # Updating in Thingspeak
+            # field 1 - turbidity vs time plot
+            thing_speak_update(1,turbidity_level,'turbidity value')
+
+            # field 2 - Rain detection vs time plot
+            rain_value=int(rain_flag)
+            thing_speak_update(2,rain_value,'Rain detection')
+        else:
+            # print('Sunny')
+            pass
+        # Check every minute
+        time.sleep(1)
+main()
+ser.close()  

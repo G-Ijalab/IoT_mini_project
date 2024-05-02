@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>IoT</title>
+    <!-- logo <link rel="icon" type="image/x-icon" link=""/>-->
+    <meta name="author" content="aswin balaji arun" />
+    <meta name="description" content="some thing" />
+    <link rel="stylesheet" type="text/css" href="iot_styles.css"/>
+</head>
+<body>
+    <header id="header">
+        <h1>Smart Rain water management</h1>
+    </header>
+    <main>
+        <div id="valve-status" class="sub-main">
+            <h2>Valve status</h2>
+            <div id="status-bar">
+                <p>Status: <span id="status">Loading...</span></p>
+            </div>
+        </div>
+        <div id="sensor-values" class="sub-main">
+            <h2>Sensor values</h2>
+            <!--add link or graph itself using iframe tags-->
+            <h3>Turbidity Sensor Value</h3>
+            <iframe class="graph" src="https://thingspeak.com/channels/2511886/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Turbidity(NTU)&type=line"></iframe>
+            <h3>Rain Detection Timeline</h3>
+            <iframe class="graph" src="https://thingspeak.com/channels/2511886/charts/2?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Rain_sensor(Boolean)&type=line"></iframe>
+        </div>
+    </main>
+    <div id="scroll-link">
+        <a href="#header">&nbsp; &#8593; Back-To-Top</a>
+    </div>
+    <script src="C:\Users\balaj\OneDrive\Desktop\IoT\iotjs.js"></script>
+</body>
+</html>
